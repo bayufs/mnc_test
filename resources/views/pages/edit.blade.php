@@ -52,11 +52,12 @@
                                 <div class="row">
                                     <div class="col-4">
                                         <label for="">Main Image</label>
-                                        <input type="text" name="old_main_image" value="{{ json_decode($prduct->multiple_image->main_image) }}">
+                                        <input type="hidden" name="old_main_image" value="{{ json_decode($product->multiple_image)->main_image }}">
                                         <input type="file" name="main_image" value="">
                                     </div>
                                     <div class="col-4">
                                         <label for="">Second Image</label>
+                                        <input type="hidden" name="old_second_image" value="{{ json_decode($product->multiple_image)->second_image }}">
                                         <input type="file" name="second_image" value="">
                                     </div>
                                 </div>
@@ -66,7 +67,7 @@
                             <label class="col-4">Sizes</label>
                             <div class="col-8">
                                 <div class="custom-control custom-checkbox custom-control-inline">
-                                    <input name="size[]" id="checkbox_0" type="checkbox" checked="checked"
+                                    <input name="size[]" id="checkbox_0" type="checkbox"
                                         class="custom-control-input" value="s">
                                     <label for="checkbox_0" class="custom-control-label">S</label>
                                 </div>
@@ -90,6 +91,7 @@
                                         class="custom-control-input" >
                                     <label for="checkbox_4" class="custom-control-label">XXL</label>
                                 </div>
+                                <input type="hidden" name="old_size" value="{{ $product->multiple_size }}"id="exampleCheck">
                             </div>
                         </div>
 
@@ -113,6 +115,7 @@
                                         <input type="checkbox" name="color[]" class="form-check-input" id="exampleCheck1" value="abu-abu">
                                         <label class="form-check-label" for="exampleCheck1">Abu-abu</label>
                                       </div>
+                                      <input type="hidden" name="old_color" value="{{ $product->multiple_color }}"id="exampleCheck">
                                 </div>
 
                             </div>
@@ -139,6 +142,7 @@
                             </div>
                         </div>
                         <div class="form-group row">
+                            <input type="hidden" name="id" value="<?php echo $_GET['id']?>">
                             <button type="reset" class="btn btn-dark ml-3">Cancel</button>
                             <button type="submit" class="btn btn-primary ml-1">Save</button>
                         </div>
