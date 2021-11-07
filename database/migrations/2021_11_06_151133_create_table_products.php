@@ -17,6 +17,7 @@ class CreateTableProducts extends Migration
             $table->id();
             $table->unsignedBigInteger('categories_id');
             $table->string('name');
+            $table->text('description');
             $table->text('multiple_image');
             $table->text('multiple_color');
             $table->text('multiple_size');
