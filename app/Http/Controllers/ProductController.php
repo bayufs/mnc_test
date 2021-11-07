@@ -2,17 +2,24 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Category;
 use App\Models\Product;
-use Validator;
 use DB;
+use Illuminate\Http\Request;
+use Validator;
 
 class ProductController extends Controller
 {
     public function index()
     {
         $products = Product::with('category')->orderBy('created_at', 'DESC')->simplePaginate(10);
+        return view('pages.product', compact('products'));
+    }
+
+    public function search(Request $request)
+    {
+        $keyword = $request->keyword;
+        $products = Product::with('category')->where('name', 'like', '%' . $keyword . '%')->simplePaginate(10);
         return view('pages.product', compact('products'));
     }
 
@@ -40,18 +47,18 @@ class ProductController extends Controller
             if (!$validator->fails()) {
 
                 if ($request->file('main_image')) {
-                    $mainImage = time().'.'.$request->main_image->extension();
+                    $mainImage = time() . '.' . $request->main_image->extension();
                     $request->main_image->move(public_path('uploads'), $mainImage);
                 }
 
                 if ($request->file('second_image')) {
-                    $secondImage = time().'.'.$request->second_image->extension();
+                    $secondImage = time() . '.' . $request->second_image->extension();
                     $request->second_image->move(public_path('uploads'), $secondImage);
                 }
 
                 $images = [
                     'main_image' => $mainImage,
-                    'second_image' => $secondImage
+                    'second_image' => $secondImage,
                 ];
 
                 $pricePerVariants = [
@@ -69,8 +76,8 @@ class ProductController extends Controller
                     'description' => $request->description,
                     'multiple_image' => json_encode($images),
                     'multiple_color' => json_encode($request->color),
-                    'multiple_size' =>  json_encode($request->size),
-                    'multiple_price' => json_encode($pricePerVariants)
+                    'multiple_size' => json_encode($request->size),
+                    'multiple_price' => json_encode($pricePerVariants),
                 ];
 
                 $createProduct = Product::create($data);
@@ -86,7 +93,7 @@ class ProductController extends Controller
 
             }
 
-        } catch (\Throwable $e) {
+        } catch (\Throwable$e) {
             DB::rollback();
             return redirect()->route('product.index')->with('failed', $e->getMessage());
         }
@@ -119,14 +126,14 @@ class ProductController extends Controller
             if (!$validator->fails()) {
 
                 if ($request->file('main_image')) {
-                    $mainImage = time().'.'.$request->main_image->extension();
+                    $mainImage = time() . '.' . $request->main_image->extension();
                     $request->main_image->move(public_path('uploads'), $mainImage);
                 } else {
                     $mainImage = $request->old_main_image;
                 }
 
                 if ($request->file('second_image')) {
-                    $secondImage = time().'.'.$request->second_image->extension();
+                    $secondImage = time() . '.' . $request->second_image->extension();
                     $request->second_image->move(public_path('uploads'), $secondImage);
                 } else {
                     $secondImage = $request->old_second_image;
@@ -134,7 +141,7 @@ class ProductController extends Controller
 
                 $images = [
                     'main_image' => $mainImage,
-                    'second_image' => $secondImage
+                    'second_image' => $secondImage,
                 ];
 
                 $pricePerVariants = [
@@ -152,8 +159,8 @@ class ProductController extends Controller
                     'description' => $request->description,
                     'multiple_image' => json_encode($images),
                     'multiple_color' => (!empty($request->color)) ? json_encode($request->color) : $request->old_color,
-                    'multiple_size' =>  (!empty($request->size)) ? json_encode($request->size) : $request->old_size,
-                    'multiple_price' => json_encode($pricePerVariants)
+                    'multiple_size' => (!empty($request->size)) ? json_encode($request->size) : $request->old_size,
+                    'multiple_price' => json_encode($pricePerVariants),
                 ];
 
                 $id = $request->id;
@@ -171,7 +178,7 @@ class ProductController extends Controller
 
             }
 
-        } catch (\Throwable $e) {
+        } catch (\Throwable$e) {
             DB::rollback();
             return redirect()->route('product.index')->with('failed', $e->getMessage());
         }
@@ -187,10 +194,9 @@ class ProductController extends Controller
                 return redirect()->route('product.index')->with('success', 'Successfully remove a product');
             }
             return redirect()->route('product.index')->with('failed', 'Fail to remove a product');
-        } catch (\Throwable $e) {
+        } catch (\Throwable$e) {
             return redirect()->route('product.index')->with('failed', $e->getMessage());
         }
     }
-
 
 }

@@ -15,7 +15,7 @@ use App\Http\Controllers\ProductController;
 */
 
 Route::get('/', function () {
-    return view('pages.product');
+   return redirect()->route('product.index');
 });
 
 
@@ -26,4 +26,5 @@ Route::group(['prefix' => 'products'], function(){
     Route::get('/edit', [ProductController::class, 'edit'])->name('product.edit');
     Route::post('/update', [ProductController::class, 'update'])->name('product.update');
     Route::get('/delete', [ProductController::class, 'destroy'])->name('product.delete');
+    Route::get('/search', [ProductController::class, 'search'])->name('product.search');
 });
